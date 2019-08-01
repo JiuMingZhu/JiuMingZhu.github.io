@@ -12,7 +12,7 @@
     
     
     
-    <title>分类: Coding | 久铭的空间</title>
+    <title>ABL中的CHARACTER | 久铭的空间</title>
     <!-- inject:style -->
     <link href="/css/style.css" rel="stylesheet" type="text/css">
     <!-- endinject -->
@@ -152,29 +152,103 @@
     
     <div class="cube-content">
         <div class="cube-left">
-            <style>
-    @media(max-width: 768px) {
-        body {
-            background-color: #fff!important;
-        }
-    }
-</style>
-<div class="cube-archives">
+            <div class="cube-article">
+    <h1 class="title">ABL中的CHARACTER</h1>
     
-    <div class="cube-archive" style="margin-top: 0;">
-        <h1 class="title">Coding</h1>
-        
-        <ul class="posts">
-            
-            <li class="post">
-                <a href="/2016/11/08/Hexo测试——图片的保存以及引用/">Hexo测试——图片的保存以及引用</a>
-            </li>
-            
-        </ul>
-        
-    </div>
+    <div class="cube-article-header">
+        <div class="cube-article-date">
+            <i class="cube-icon cube-icon-date" aria-hidden="true"></i>
+            <!-- moment.js对象 -->
+            2019-08-01
+        </div>
+        <div class="cube-article-tags">
+    <i class="cube-icon cube-icon-tag" aria-hidden="true"></i>
+    
+    <a href="/tags/ABL/">#ABL</a>
     
 </div>
+    </div>
+    
+    <div class="cube-article-content cube-markdown">
+        
+        <h3 id="该来的迟早要来，终于开始了对progress数据库的学习"><a href="#该来的迟早要来，终于开始了对progress数据库的学习" class="headerlink" title="该来的迟早要来，终于开始了对progress数据库的学习"></a>该来的迟早要来，终于开始了对progress数据库的学习</h3><a id="more"></a>
+<h3 id="progress数据库"><a href="#progress数据库" class="headerlink" title="progress数据库"></a>progress数据库</h3><h3 id="ABL中的CHARACTER"><a href="#ABL中的CHARACTER" class="headerlink" title="ABL中的CHARACTER"></a>ABL中的CHARACTER</h3><p>对于CHARACTER的困惑，源自于以下两种写法。  </p>
+<img src="/2019/08/01/ABL中的CHARACTER/1.png" title="让人费解的写法">
+
+<blockquote>
+<p>MESSAGE “input” UPDATE testArry FORMAT “x(60)”.<br>这句的意思是弹窗，这个弹窗是用于接收一个最大长度为60的字符串，并将其返回。  </p>
+</blockquote>
+<p>这就引发了一个问题：<br><code>An array was specified in an expression, on the right-hand side of an assignment, or as a parameter 
+ when no array is appropriate or expected.</code><br>意思就是，你不能把一个字符串类型赋值给一个Array类型的变量（no array is appropriate or expected.）  </p>
+<p>那么问题来了，Str是string，testArry不是string  （这里的Str命名不符合驼峰法，打50大板→_→）<br>这就让人费解了啊，ABL里面CHARACTER到底是什么类型的值呢？？？  </p>
+<img src="/2019/08/01/ABL中的CHARACTER/2.png" title="黑人问号">  
+
+<p>查资料ing…<br>找到了一篇文章：<br><a href="https://help.consultingwerkcloud.com/openedge/117/rfi1424920636568.html" target="_blank" rel="noopener">Data types</a>  </p>
+<img src="/2019/08/01/ABL中的CHARACTER/3.png" title="DataTypes">  
+<blockquote>
+<p>CHARACTER data consists of numbers, letters, and special characters.  </p>
+</blockquote>
+<p>由此可见，在ABL中，CHARACTER data 基本符合我们在传统语言中对char的理解<br>继续试验：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">DEFINE VARIABLE Str AS CHARACTER NO-UNDO.</span><br><span class="line">Str = &apos;a&apos;.</span><br><span class="line">MESSAGE Str.</span><br><span class="line">DEFINE VARIABLE testArry AS CHARACTER NO-UNDO EXTENT.</span><br><span class="line">EXTENT(testArry) = 4.</span><br><span class="line">testArry[1] = &apos;a&apos;.</span><br><span class="line">MESSAGE testArry[1].</span><br><span class="line">testArry[1] = &quot;a&quot;.</span><br><span class="line">MESSAGE testArry[1].</span><br><span class="line">testArry[1] = &quot;abc&quot;.</span><br><span class="line">MESSAGE testArry[1].</span><br></pre></td></tr></table></figure>
+
+<p>输出值如下：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a</span><br><span class="line">a</span><br><span class="line">a</span><br><span class="line">abc</span><br></pre></td></tr></table></figure>
+
+<p>那么问题来了，CHARACTER 到底是string 还是char？（写strong type 语言的人伤不起Orz.）<br>Debug走起！  </p>
+<img src="/2019/08/01/ABL中的CHARACTER/4.png" title="Debug">  
+<p>emmm，这边双引号，是不是表示此时的Str是不是string类型？<br>回到<a href="https://help.consultingwerkcloud.com/openedge/117/rfi1424920636568.html" target="_blank" rel="noopener">Data types</a>找资料  </p>
+<img src="/2019/08/01/ABL中的CHARACTER/5.png" title="Default Value">  
+
+<p>CHARACTER的默认值是””,再看一眼从ABL到.net 的类型映射</p>
+<img src="/2019/08/01/ABL中的CHARACTER/6.png" title="Mapping vs .Net">  
+
+<p>到这里，基本可以把CHARACTER当做string类型去理解了</p>
+<blockquote>
+<p>那么问题来了，Str是string，testArry不是string  （这里的Str命名不符合驼峰法，打50大板→_→）</p>
+</blockquote>
+<p>搞明白了CHARACTER的类型，这个问题依旧还再哪儿。<br>看之前写的测试代码  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">DEFINE VARIABLE Str AS CHARACTER NO-UNDO.</span><br><span class="line">Str = &apos;a&apos;.</span><br><span class="line">MESSAGE Str.</span><br><span class="line">DEFINE VARIABLE testArry AS CHARACTER NO-UNDO EXTENT.</span><br><span class="line">EXTENT(testArry) = 4.</span><br><span class="line">testArry[1] = &apos;a&apos;.</span><br><span class="line">MESSAGE testArry[1].</span><br><span class="line">testArry[1] = &quot;a&quot;.</span><br><span class="line">MESSAGE testArry[1].</span><br><span class="line">testArry[1] = &quot;abc&quot;.</span><br><span class="line">MESSAGE testArry[1].</span><br></pre></td></tr></table></figure>
+
+<p>输出值如下：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a</span><br><span class="line">a</span><br><span class="line">a</span><br><span class="line">abc</span><br></pre></td></tr></table></figure>
+
+<p>这里有个attribute <code>EXTENT</code>  ，这个属性是用来标记一个变量是否应该被当做数组来处理。</p>
+<blockquote>
+<p>EXTENT attribute<br>The number of elements in an array field.<br>Data type: INTEGER<br>Access: Read-only<br>Applies to: Buffer-field object handle<br>Note: The EXTENT attribute corresponds to the EXTENT function.  </p>
+</blockquote>
+<p>所以，之所以会有此前的问题，是因为我在声明变量的时候给这2个变量分配了不同的类型。<br>使用  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MESSAGE &quot;input&quot; UPDATE testArry[1] FORMAT &quot;x(60)&quot;.</span><br><span class="line">MESSAGE testArry[1].</span><br></pre></td></tr></table></figure>
+
+<p>以访问数组的方式去访问此时的testArry 就没有问题。<br>对于EXTENT这个attribute，我的理解是：这只是ABL中的一个书写语法<br>加上了EXTENT 的variable就好比C#中加上了[] 的variable  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DEFINE VARIABLE testArry AS CHARACTER NO-UNDO EXTENT.</span><br></pre></td></tr></table></figure>
+
+<p>&lt;=&gt;  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">string[] testArry;</span><br></pre></td></tr></table></figure>
+
+<p>以上に</p>
+
+    </div>
+</div>
+
+<div class="cube-article-nav">
+    <ul>
+        
+        
+        <li class="next">
+            <a href="/2019/07/25/CSarpPointofInstance/">
+                CSarp Point of Instance
+                <i class="cube-icon cube-next" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+<!-- TODO 根据theme.comment的内容进行入口选择 -->
+
+
+
         </div>
         <div class="cube-right">
             
@@ -311,12 +385,12 @@
     <div class="cube-boxs">
         
         
-        <div class="cube-box-bg ">
+        <div class="cube-box ">
             <a href="/categories/Program/">#Program</a>
         </div>
         
         
-        <div class="cube-box-bg ">
+        <div class="cube-box ">
             <a href="/categories/Coding/">#Coding</a>
         </div>
         
@@ -347,7 +421,7 @@
         </div>
         
         
-        <div class="cube-box ">
+        <div class="cube-box-bg ">
             <a href="/tags/Other/">#Other</a>
         </div>
         
