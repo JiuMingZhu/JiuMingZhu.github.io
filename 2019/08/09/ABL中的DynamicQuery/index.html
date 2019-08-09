@@ -12,7 +12,7 @@
     
     
     
-    <title>标签: Other | 久铭的空间</title>
+    <title>ABL中的DynamicQuery | 久铭的空间</title>
     <!-- inject:style -->
     <link href="/css/style.css" rel="stylesheet" type="text/css">
     <!-- endinject -->
@@ -152,29 +152,130 @@
     
     <div class="cube-content">
         <div class="cube-left">
-            <style>
-    @media(max-width: 768px) {
-        body {
-            background-color: #fff!important;
-        }
-    }
-</style>
-<div class="cube-archives">
+            <div class="cube-article">
+    <h1 class="title">ABL中的DynamicQuery</h1>
     
-    <div class="cube-archive" style="margin-top: 0;">
-        <h1 class="title">Other</h1>
-        
-        <ul class="posts">
-            
-            <li class="post">
-                <a href="/2016/11/08/Hexo测试——图片的保存以及引用/">Hexo测试——图片的保存以及引用</a>
-            </li>
-            
-        </ul>
-        
-    </div>
+    <div class="cube-article-header">
+        <div class="cube-article-date">
+            <i class="cube-icon cube-icon-date" aria-hidden="true"></i>
+            <!-- moment.js对象 -->
+            2019-08-09
+        </div>
+        <div class="cube-article-tags">
+    <i class="cube-icon cube-icon-tag" aria-hidden="true"></i>
+    
+    <a href="/tags/ABL/">#ABL</a>
     
 </div>
+    </div>
+    
+    <div class="cube-article-content cube-markdown">
+        
+        <h2 id="DynamicQuery"><a href="#DynamicQuery" class="headerlink" title="DynamicQuery"></a>DynamicQuery</h2><p>当一个proc需要动态根据输入的条件去query或者group，条件分支越多，需要写的query分支就越多，<br>此时就需要动态查询来动态的根据查询条件来组合query语句了。  </p>
+<a id="more"></a>
+<h3 id="DynamicQuery的一般格式"><a href="#DynamicQuery的一般格式" class="headerlink" title="DynamicQuery的一般格式"></a>DynamicQuery的一般格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">DEF VAR qh AS HANDLE NO-UNDO.</span><br><span class="line">DEF VAR query-string AS CHAR NO-UNDO.</span><br><span class="line">CREATE QUERY qh.</span><br><span class="line">qh:SET-BUFFERS(BUFFER xxxx HANDLE).</span><br><span class="line">ASSIGN qry-str = &quot;xxxxxx&quot;.</span><br><span class="line">qh:QUERY-PREPARE(qry-str).</span><br><span class="line">qh:QUERY-OPEN.</span><br><span class="line">qh:GET-FIRST().</span><br><span class="line">REPEAT WHILE NOT qh:QUERY-OFF-END:</span><br><span class="line">qh:GET-NEXT().</span><br><span class="line">END.</span><br><span class="line">qh:QUERY-CLOSE.</span><br><span class="line">DELETE OBJECT qh.</span><br></pre></td></tr></table></figure>
+
+<h4 id="咬文嚼字时间到"><a href="#咬文嚼字时间到" class="headerlink" title="咬文嚼字时间到"></a>咬文嚼字时间到</h4><p><code>初学一门语言的时候，最难熬不过于熟悉它的语法、特性。不过熟悉之后，写代码就可以骚起来了。——沃兹基硕德</code>  </p>
+<ul>
+<li><ol>
+<li>CREATE QUERY statement<blockquote>
+<p>Creates a dynamic query.<br><code>handle</code><br>A variable of type HANDLE that represents the handle of the query object.<br><em>CREATE-QUERY must be followed by the QUERY-PREPARE( ) and QUERY-OPEN() methods before the query can be run.</em>  </p>
+</blockquote>
+</li>
+</ol>
+</li>
+</ul>
+<p>没啥好说的，就是固定的语法.看这个说明——“handle of the query object”，这里使用的qh应该<br>可以理解为一个指向query对象实例的指针。<br>在一个query可以被执行前，必须执行QUERY-PREPARE() 和 QUERY-OPEN()方法。  </p>
+<ul>
+<li><ol start="2">
+<li>qh:GET-FIRST()<blockquote>
+<p>Moves a query object’s result list pointer to the first row.<br>Return type: LOGICAL<br><em>GET-FIRST() returns TRUE if the first record in the query is found. If the query is not open or the first record cannot be found (query is empty), the method returns FALSE. If the query object handle is invalid, the method returns the Unknown value (?).</em></p>
+</blockquote>
+</li>
+</ol>
+</li>
+</ul>
+<p>学了ABL的面向对象后再来看这个语法，这尼玛不就是调用实例方法的语法么==<br>顺便说一句：当时还想着如果没找到的话继续执行是不是会报错，现在知道了，GET-FIRST()这个函数是有返回值的，可以根据这个函数的返回值去判断当前这个dynamic query的结果集是否有数据。  </p>
+<ul>
+<li><ol start="3">
+<li>REPEAT<blockquote>
+<p>Begins a block of statements that are processed repeatedly until the block ends in one of several ways. Use an END statement to end a REPEAT block.  </p>
+</blockquote>
+</li>
+</ol>
+</li>
+</ul>
+<p>REPEAT就是一个固定的statement.和Do一样，可以用来做循环。<br>不BB，上代码  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">DEFINE VARIABLE i AS INTEGER NO-UNDO.</span><br><span class="line">DO i = 1 TO 5:</span><br><span class="line">   MESSAGE &quot;Hit&quot; i.</span><br><span class="line">END.</span><br><span class="line">i=0.</span><br><span class="line"></span><br><span class="line">REPEAT i = 1 TO 5:</span><br><span class="line">   MESSAGE &quot;Hit&quot; i.</span><br><span class="line">END.</span><br></pre></td></tr></table></figure>
+
+<p>执行结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&quot;Hit&quot; 1</span><br><span class="line">&quot;Hit&quot; 2</span><br><span class="line">&quot;Hit&quot; 3</span><br><span class="line">&quot;Hit&quot; 4</span><br><span class="line">&quot;Hit&quot; 5</span><br><span class="line">&quot;Hit&quot; 1</span><br><span class="line">&quot;Hit&quot; 2</span><br><span class="line">&quot;Hit&quot; 3</span><br><span class="line">&quot;Hit&quot; 4</span><br><span class="line">&quot;Hit&quot; 5</span><br></pre></td></tr></table></figure>
+
+<p>→_→，我有一万种方法来写循环。<br>但是，这句话我没看懂：  </p>
+<blockquote>
+<p>Use a DO statement rather than a REPEAT statement when you loop through each element ofan array. This way the AVM does not create separate subtransactions within atransaction.</p>
+</blockquote>
+<p>反正试验起来DO 和 REPEAT表现不一致就是了，有空问问公司大佬。</p>
+<ul>
+<li><ol start="4">
+<li>qh:GET-NEXT()<blockquote>
+<p>Moves a query object’s result list pointer ahead one row.<br><code>GET-NEXT() returns TRUE if the next record in the query is found. If the query is not open or the next record cannot be found (query is empty or the query result list pointer is on the last row), the method returns FALSE. If the query object handle is invalid, the method returns the Unknown value (?).</code>  </p>
+</blockquote>
+</li>
+</ol>
+</li>
+</ul>
+<p>意思就是把当前的query指针移向结果集的下一行，并返回结果。所以之前的一般格式理论上也可以改为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">DEF VAR qh AS HANDLE NO-UNDO.</span><br><span class="line">DEF VAR query-string AS CHAR NO-UNDO.</span><br><span class="line">CREATE QUERY qh.</span><br><span class="line">qh:SET-BUFFERS(BUFFER xxxx HANDLE).</span><br><span class="line">ASSIGN qry-str = &quot;xxxxxx&quot;.</span><br><span class="line">qh:QUERY-PREPARE(qry-str).</span><br><span class="line">qh:QUERY-OPEN.</span><br><span class="line">qh:GET-FIRST().</span><br><span class="line">REPEAT WHILE YES:</span><br><span class="line">IF NOT qh:GET-NEXT() THEN</span><br><span class="line">   LEAVE.</span><br><span class="line">END.</span><br><span class="line">qh:QUERY-CLOSE.</span><br><span class="line">DELETE OBJECT qh.</span><br></pre></td></tr></table></figure>
+
+<p>这边通过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">IF NOT qh:GET-NEXT() THEN</span><br><span class="line">   LEAVE.</span><br></pre></td></tr></table></figure>
+
+<p>这段代码来控制循环的终结。</p>
+<ul>
+<li><ol start="5">
+<li>qh:QUERY-CLOSE<blockquote>
+<p>Closes a query object.<br><em>A QUERY-CLOSE does not invalidate a previous QUERY-PREPARE</em></p>
+</blockquote>
+</li>
+</ol>
+</li>
+<li><ol start="6">
+<li>DELETE OBJECT qh<blockquote>
+<p>Deletes an object such as a widget, a procedure, a server, a socket, or an instance of aclass. Deleting the object causes all allocated resources associated with the object to bereturned to the system (except when otherwise noted).<br><em>.NETautomatically calls Dispose( ) on a non-modal form when it is closed,unless the form is shown as a dialog box. .NET simply hides the dialog when it isclosed. However, the AVM calls Dispose( ) by default for dialogs thatinherit from Progress.Windows.Form. The AVM does not do this if the DisposeDialogOnClose property of the form is set to FALSE. This canbe set on a particular instance or globally using the No Dialog Dispose(-nodialogdispose) startup parameter. One use case for not calling Dispose( ) is if you want to re-use the form at a latertime.</em></p>
+</blockquote>
+</li>
+</ol>
+</li>
+</ul>
+<p>以下是对object的描述  </p>
+<blockquote>
+<p>The ABL Virtual Machine (AVM) automatically deletes (garbage collects) any class instance that you create with the NEW statement some time after no reference to that object exists in the ABL session. However, you can force any class instance to be deleted immediately by using the DELETE OBJECT statement. For more information on garbage collection for class instances, see the DELETE OBJECT statement reference entry.</p>
+</blockquote>
+<p>AVM是有垃圾回收机制的，那么问题来了：为什么query handle需要被释放？可能是因为query对象创建后会始终保持着引用的状态，所以不会被自动回收？</p>
+
+    </div>
+</div>
+
+<div class="cube-article-nav">
+    <ul>
+        
+        
+        <li class="next">
+            <a href="/2019/08/05/ABL中的Create/">
+                ABL中的Create
+                <i class="cube-icon cube-next" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+<!-- TODO 根据theme.comment的内容进行入口选择 -->
+
+
+
         </div>
         <div class="cube-right">
             
@@ -360,7 +461,7 @@
         </div>
         
         
-        <div class="cube-box-bg ">
+        <div class="cube-box ">
             <a href="/tags/Other/">#Other</a>
         </div>
         
