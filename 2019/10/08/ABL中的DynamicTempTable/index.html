@@ -12,7 +12,7 @@
     
     
     
-    <title>About Me | 久铭的空间</title>
+    <title>ABL中的DynamicTempTable | 久铭的空间</title>
     <!-- inject:style -->
     <link href="/css/style.css" rel="stylesheet" type="text/css">
     <!-- endinject -->
@@ -153,28 +153,60 @@
     <div class="cube-content">
         <div class="cube-left">
             <div class="cube-article">
-    <h1 class="title">About Me</h1>
+    <h1 class="title">ABL中的DynamicTempTable</h1>
     
     <div class="cube-article-header">
-        <div class="cube-article-date page">
+        <div class="cube-article-date">
             <i class="cube-icon cube-icon-date" aria-hidden="true"></i>
             <!-- moment.js对象 -->
-            2018-06-29
+            2019-10-08
         </div>
+        <div class="cube-article-tags">
+    <i class="cube-icon cube-icon-tag" aria-hidden="true"></i>
+    
+    <a href="/tags/ABL/">#ABL</a>
+    
+</div>
     </div>
     
     <div class="cube-article-content cube-markdown">
         
-        <h3 id="关于我"><a href="#关于我" class="headerlink" title="关于我"></a>关于我</h3><p>一个死肥宅，刚毕业一年，正在向着油腻腻的中年大叔发展。</p>
-<p>一时心血来潮，然后就选择了这个域名</p>
-<p>这个博客是用来记录日常生活的</p>
-<p>没办法，突然中二</p>
-<p>好像，我确实挺垃圾的  </p>
-<h3 id="斜杠青年"><a href="#斜杠青年" class="headerlink" title="斜杠青年"></a>斜杠青年</h3><p>/初级码农/航模飞手/徒步新驴/黑暗料理大师  </p>
-<hr>
+        <h2 id="DynamicTempTable"><a href="#DynamicTempTable" class="headerlink" title="DynamicTempTable"></a>DynamicTempTable</h2><p>Query可以有动态的，temp-table也可以有。  </p>
+<a id="more"></a>
+<h3 id="DynamicTempTable的一般格式"><a href="#DynamicTempTable的一般格式" class="headerlink" title="DynamicTempTable的一般格式"></a>DynamicTempTable的一般格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">/* declare handles */</span><br><span class="line">DEFINE VARIABLE tth AS HANDLE NO-UNDO. //define a temp-table handle</span><br><span class="line">DEFINE VARIABLE tthndl AS HANDLE NO-UNDO. //define a temp-table buffer handle</span><br><span class="line">DEFINE VARIABLE qh AS HANDLE NO-UNDO. define a dynamic query handle</span><br><span class="line"></span><br><span class="line">/* Create an empty, undefined temp-table */</span><br><span class="line">CREATE TEMP-TABLE tth.</span><br><span class="line">/* Add fields to the temp-table */</span><br><span class="line">tth:ADD-NEW-FIELD(&quot;FieldName&quot;,&quot;datatype&quot;).</span><br><span class="line">tth:ADD-NEW-FIELD(&quot;studentId&quot;, &quot;character&quot;).</span><br><span class="line">/* Signal that the temp-table definition is complete and assign it the name &quot;ttS  </span><br><span class="line">tudent&quot; */</span><br><span class="line">tth:TEMP-TABLE-PREPARE(&quot;temp-table name&quot;).</span><br><span class="line"></span><br><span class="line">/* Create a dynamic query */</span><br><span class="line">CREATE QUERY qh.</span><br><span class="line">/* dynamic query settings */</span><br><span class="line">qh:SET-BUFFERS(tthndl).</span><br><span class="line">qh:QUERY-PREPARE(&quot;query string&quot;).</span><br><span class="line">qh:QUERY-OPEN().</span><br><span class="line">qh:GET-FIRST().</span><br><span class="line">REPEAT WHILE NOT qh:QUERY-OFF-END:</span><br><span class="line">    /* options on this record */</span><br><span class="line">    qh:GET-NEXT().</span><br><span class="line">END.</span><br><span class="line">qh:QUERY-CLOSE().</span><br><span class="line">DELETE OBJECT qh.</span><br></pre></td></tr></table></figure>
+
+<h4 id="举个栗子"><a href="#举个栗子" class="headerlink" title="举个栗子"></a>举个栗子</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">/* declare a temp-table */</span><br><span class="line">DEFINE VARIABLE tth AS HANDLE NO-UNDO.</span><br><span class="line">DEFINE VARIABLE tthndl AS HANDLE NO-UNDO.</span><br><span class="line">/* Create an empty, undefined temp-table */</span><br><span class="line">CREATE TEMP-TABLE tth.</span><br><span class="line">/* Add fields to the temp-table */</span><br><span class="line">tth:ADD-NEW-FIELD(&quot;studentName&quot;,&quot;character&quot;).</span><br><span class="line">tth:ADD-NEW-FIELD(&quot;studentNo&quot;,&quot;integer&quot;).</span><br><span class="line">tth:ADD-NEW-FIELD(&quot;studentId&quot;, &quot;character&quot;).</span><br><span class="line">/* Signal that the temp-table definition is complete and assign it the name &quot;ttS  </span><br><span class="line">tudent&quot; */</span><br><span class="line">tth:TEMP-TABLE-PREPARE(&quot;ttStudent&quot;).</span><br><span class="line"></span><br><span class="line">/* throw errorr after temp-table prepared */</span><br><span class="line">//tth:ADD-NEW-FIELD(&quot;studentScore&quot;, &quot;integer&quot;).</span><br><span class="line"></span><br><span class="line">/* Get the buffer-handle for the temp-table */</span><br><span class="line">tthndl = tth:DEFAULT-BUFFER-HANDLE. //DEFAULT-BUFFER-HANDLE returns a buffer of   </span><br><span class="line">temptable</span><br><span class="line"></span><br><span class="line">/* create a record */</span><br><span class="line">tthndl:BUFFER-CREATE().</span><br><span class="line">tthndl:BUFFER-FIELD(&quot;studentName&quot;):BUFFER-VALUE = &quot;August&quot;.</span><br><span class="line">tthndl:BUFFER-FIELD(&quot;studentNo&quot;):BUFFER-VALUE = &quot;0001&quot;.</span><br><span class="line">tthndl:BUFFER-FIELD(&quot;studentId&quot;):BUFFER-VALUE = &quot;0001&quot;.</span><br><span class="line">tthndl:BUFFER-RELEASE().</span><br><span class="line">/* or can use simple syntax */</span><br><span class="line">tthndl:BUFFER-CREATE().</span><br><span class="line">tthndl::studentName = &quot;Chen&quot;.</span><br><span class="line">tthndl::studentNo = &quot;0002&quot;.</span><br><span class="line">tthndl::studentId = &quot;0002&quot;.</span><br><span class="line">tthndl:BUFFER-RELEASE().</span><br></pre></td></tr></table></figure>
+
+<p>这边有个语法糖，可以用<code>::</code>代替冗长的BUFFER-FIELD(“XXX”):BUFFER-VALUE</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/* dynamic temp-table need dynamic query */</span><br><span class="line">//FOR EACH tth</span><br><span class="line">//    DISP studentName studentNo studentId.</span><br><span class="line">//END.</span><br></pre></td></tr></table></figure>
+
+<p>这边不能用静态查询，因为tth和tthndl只是temp-table 的handle 和 buffer handle，<br>AVM没有办法知道此时此刻的handle指向的是哪个temp-table.<br><code>tth:TEMP-TABLE-PREPARE(&quot;ttStudent&quot;).</code>执行完后，就不能去改变field了，这句相当于告诉<br>AVM此时的temp-table已经<br>准备完毕。但是我依旧可以再执行以下步骤：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">CREATE TEMP-TABLE tth.</span><br><span class="line">/* Add fields to the temp-table */</span><br><span class="line">tth:ADD-NEW-FIELD(&quot;studentName&quot;,&quot;character&quot;).</span><br><span class="line">tth:ADD-NEW-FIELD(&quot;studentNo&quot;,&quot;integer&quot;).</span><br><span class="line">tth:ADD-NEW-FIELD(&quot;studentId&quot;, &quot;character&quot;).</span><br><span class="line">/* Signal that the temp-table definition is complete and assign it the name &quot;ttS  </span><br><span class="line">tudent&quot; */</span><br><span class="line">tth:TEMP-TABLE-PREPARE(&quot;ttStudent&quot;).</span><br></pre></td></tr></table></figure>
+
+<p>即将这个temp-table的指针指向一个新的temp-table，而我可以prepare一个新的tablename。<br>因此，dynamic temp-table只能用dynamic query去查询。  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">/* create a dynamic query */</span><br><span class="line">DEFINE VARIABLE qh AS HANDLE      NO-UNDO.</span><br><span class="line">DEFINE VARIABLE qryStr AS CHARACTER   NO-UNDO.</span><br><span class="line">qryStr = &quot;FOR EACH ttStudent NO-LOCK&quot;.</span><br><span class="line">CREATE QUERY qh.</span><br><span class="line">qh:SET-BUFFERS(tthndl).</span><br><span class="line">qh:QUERY-PREPARE(qryStr).</span><br><span class="line">qh:QUERY-OPEN().</span><br><span class="line">qh:GET-FIRST().</span><br><span class="line">REPEAT WHILE NOT qh:QUERY-OFF-END:</span><br><span class="line">/*     DISP qh:GET-BUFFER-HANDLE():BUFFER-FIELD(&quot;studentName&quot;):BUFFER-VALUE */</span><br><span class="line">/*          qh:GET-BUFFER-HANDLE():BUFFER-FIELD(&quot;studentNo&quot;):BUFFER-VALUE   */</span><br><span class="line">/*          qh:GET-BUFFER-HANDLE():BUFFER-FIELD(&quot;studentId&quot;):BUFFER-VALUE.  */</span><br><span class="line">    DISP qh:GET-BUFFER-HANDLE(&quot;ttStudent&quot;)::studentName //get ttStudent buffer handle in this query</span><br><span class="line">         qh:GET-BUFFER-HANDLE()::studentNo</span><br><span class="line">         qh:GET-BUFFER-HANDLE()::studentId. </span><br><span class="line">    qh:GET-NEXT().</span><br><span class="line">END.</span><br><span class="line">qh:QUERY-CLOSE().</span><br><span class="line">DELETE OBJECT qh.</span><br></pre></td></tr></table></figure>
+
+<p>dynamic query上篇博文写过了，就不多说。语法糖在这里也是可以用的，不过需要注意的就是每次<br>循环都不能忘了写qh:GET-NEXT()否则就死在这里了。。。  </p>
 
     </div>
 </div>
+
+<div class="cube-article-nav">
+    <ul>
+        
+        
+        <li class="next">
+            <a href="/2019/08/09/ABL中的DynamicQuery/">
+                ABL中的DynamicQuery
+                <i class="cube-icon cube-next" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+<!-- TODO 根据theme.comment的内容进行入口选择 -->
 
 
 
@@ -337,7 +369,7 @@
         </div>
         
         
-        <div class="cube-box ">
+        <div class="cube-box-bg ">
             <a href="/categories/Coding/">#Coding</a>
         </div>
         
@@ -353,7 +385,7 @@
     <div class="cube-boxs">
         
         
-        <div class="cube-box ">
+        <div class="cube-box-bg ">
             <a href="/tags/ABL/">#ABL</a>
         </div>
         
@@ -363,12 +395,12 @@
         </div>
         
         
-        <div class="cube-box-bg ">
+        <div class="cube-box ">
             <a href="/tags/Music/">#Music</a>
         </div>
         
         
-        <div class="cube-box ">
+        <div class="cube-box-bg ">
             <a href="/tags/Other/">#Other</a>
         </div>
         
