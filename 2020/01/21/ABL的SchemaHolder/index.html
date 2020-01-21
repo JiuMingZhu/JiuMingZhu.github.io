@@ -12,7 +12,7 @@
     
     
     
-    <title>About Me | 久铭的空间</title>
+    <title>ABL的SchemaHolder | 久铭的空间</title>
     <!-- inject:style -->
     <link href="/css/style.css" rel="stylesheet" type="text/css">
     <!-- endinject -->
@@ -153,28 +153,59 @@
     <div class="cube-content">
         <div class="cube-left">
             <div class="cube-article">
-    <h1 class="title">About Me</h1>
+    <h1 class="title">ABL的SchemaHolder</h1>
     
     <div class="cube-article-header">
-        <div class="cube-article-date page">
+        <div class="cube-article-date">
             <i class="cube-icon cube-icon-date" aria-hidden="true"></i>
             <!-- moment.js对象 -->
-            2018-06-29
+            2020-01-21
         </div>
+        <div class="cube-article-tags">
+    <i class="cube-icon cube-icon-tag" aria-hidden="true"></i>
+    
+    <a href="/tags/ABL/">#ABL</a>
+    
+</div>
     </div>
     
     <div class="cube-article-content cube-markdown">
         
-        <h3 id="关于我"><a href="#关于我" class="headerlink" title="关于我"></a>关于我</h3><p>一个死肥宅，刚毕业一年，正在向着油腻腻的中年大叔发展。</p>
-<p>一时心血来潮，然后就选择了这个域名</p>
-<p>这个博客是用来记录日常生活的</p>
-<p>没办法，突然中二</p>
-<p>好像，我确实挺垃圾的  </p>
-<h3 id="斜杠青年"><a href="#斜杠青年" class="headerlink" title="斜杠青年"></a>斜杠青年</h3><p>/初级码农/航模飞手/徒步新驴/黑暗料理大师  </p>
-<hr>
+        <h1 id="记录了一些创建-Oracle-和-MSSSqlServer-对应-schema-holder-时遇到的问题"><a href="#记录了一些创建-Oracle-和-MSSSqlServer-对应-schema-holder-时遇到的问题" class="headerlink" title="记录了一些创建 Oracle 和 MSSSqlServer 对应 schema holder 时遇到的问题"></a>记录了一些创建 Oracle 和 MSSSqlServer 对应 schema holder 时遇到的问题</h1><a id="more"></a>
+<h2 id="oracle-NLS-LANG环境变量设置"><a href="#oracle-NLS-LANG环境变量设置" class="headerlink" title="oracle NLS_LANG环境变量设置"></a>oracle NLS_LANG环境变量设置</h2><h2 id="set-NLS-LANG-AL32UTF8"><a href="#set-NLS-LANG-AL32UTF8" class="headerlink" title="set NLS_LANG=.AL32UTF8"></a><a href="https://knowledgebase.progress.com/articles/Article/000028202" target="_blank" rel="noopener">set NLS_LANG=.AL32UTF8</a></h2><p>这个可以在注册表改,也可以在环境变量改,更骚的是可以在启动的bat里面写.  </p>
+<h2 id="删除表空间"><a href="#删除表空间" class="headerlink" title="删除表空间"></a><a href="https://www.cnblogs.com/Alanf/p/9485550.htm" target="_blank" rel="noopener">删除表空间</a></h2><p>–删除空的表空间，但是不包含物理文件<br>drop tablespace tablespace_name;<br>–删除非空表空间，但是不包含物理文件<br>drop tablespace tablespace_name including contents;<br>–删除空表空间，包含物理文件<br>drop tablespace tablespace_name including datafiles;<br>–删除非空表空间，包含物理文件<br>drop tablespace tablespace_name including contents and datafiles;<br>–如果其他表空间中的表有外键等约束关联到了本表空间中的表的字段，就要加上CASCADE CONSTRAINTS<br>drop tablespace tablespace_name including contents and datafiles CASCADE CONSTRAINTS;  </p>
+<h2 id="Oracle-删除用户和表空间"><a href="#Oracle-删除用户和表空间" class="headerlink" title="Oracle 删除用户和表空间"></a>Oracle 删除用户和表空间</h2><blockquote>
+<p>Oracle 使用时间长了， 新增了许多user 和tablespace. 需要清理一下<br>对于单个user和tablespace 来说， 可以使用如下命令来完成。  </p>
+<h3 id="步骤一：-删除user"><a href="#步骤一：-删除user" class="headerlink" title="步骤一：  删除user"></a>步骤一：  删除user</h3><p>drop user ×× cascade<br>说明： 删除了user，只是删除了该user下的schema objects，是不会删除相应的tablespace的。  </p>
+<h3 id="步骤二：-删除tablespace"><a href="#步骤二：-删除tablespace" class="headerlink" title="步骤二： 删除tablespace"></a>步骤二： 删除tablespace</h3><p>DROP TABLESPACE tablespace_name INCLUDING CONTENTS AND DATAFILES;  </p>
+</blockquote>
 
     </div>
 </div>
+
+<div class="cube-article-nav">
+    <ul>
+        
+        <li class="prev">
+            <a href="/2020/01/21/ABL如何用Entry实现split/">
+                <i class="cube-icon cube-prev" aria-hidden="true"></i>
+                ABL如何用Entry实现split
+            </a>
+        </li>
+        
+        
+        <li class="next">
+            <a href="/2020/01/21/ABL-使用LOOKUP判断是否存在procedure/">
+                ABL-使用LOOKUP判断是否存在procedure
+                <i class="cube-icon cube-next" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+<!-- TODO 根据theme.comment的内容进行入口选择 -->
 
 
 
@@ -332,12 +363,12 @@
         </div>
         
         
-        <div class="cube-box-bg ">
+        <div class="cube-box ">
             <a href="/categories/Coding/">#Coding</a>
         </div>
         
         
-        <div class="cube-box ">
+        <div class="cube-box-bg ">
             <a href="/categories/Life/">#Life</a>
         </div>
         
@@ -358,7 +389,7 @@
         </div>
         
         
-        <div class="cube-box-bg ">
+        <div class="cube-box ">
             <a href="/tags/Browse/">#Browse</a>
         </div>
         
@@ -368,7 +399,7 @@
         </div>
         
         
-        <div class="cube-box ">
+        <div class="cube-box-bg ">
             <a href="/tags/Music/">#Music</a>
         </div>
         
